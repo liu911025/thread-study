@@ -3,6 +3,9 @@ package com.example.demotest.thread.tx;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 线程通信
+ */
 public class MyQueue {
 
     //1、需要一个承装元素的集合
