@@ -9,6 +9,8 @@ import java.util.concurrent.Executors;
  * 如果使用submit无法显示错误信息，一种方式是放弃使用submit，另一种是可以使用execute
  *
  * 使用submit 错误的堆栈信息跑出来的时候会被内部捕获到，所以打印不出来具体的信息
+ *
+ * 具体查看地址: https://gitee.com/liu911025/codes/o4fj09cqgutzpwakilyx731
  */
 public class ThreadPoolDemo_01 {
 
