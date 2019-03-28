@@ -3,6 +3,9 @@ package com.example.demotest.thread.cyclicBarrier;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+/**
+ *  CyclicBarrier 栅栏
+ */
 public class SummonDragonDemo {
 
     private static final int THREAD_COUNT_NUM = 7;
