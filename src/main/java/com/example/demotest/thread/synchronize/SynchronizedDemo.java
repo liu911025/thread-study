@@ -1,4 +1,4 @@
-package com.example.demotest.thread.threadLocal;
+package com.example.demotest.thread.synchronize;
 
 public class SynchronizedDemo {
 
