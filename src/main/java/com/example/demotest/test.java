@@ -3,6 +3,7 @@ package com.example.demotest;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,9 +29,17 @@ public class test {
         int num = 1999;
         int count = 2000;
 
-        //System.out.println("index : " + frontCompWithZore(num, String.valueOf(count).length()));
+        System.out.println("index : " + frontCompWithZore(num, String.valueOf(count).length()));
 
+        /*
+            数据前不足补0
+            格式说明符以%开头
+            0为补位数, 6输出字符串格式,不足补0
+         */
         System.out.println(String.format("%06d,%03d", 4, 4));
+
+        //时间 (yyyy-MM-dd)
+        System.out.println(String.format("%tF", new Date()));
 
     }
 
