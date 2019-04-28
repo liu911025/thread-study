@@ -1,12 +1,26 @@
 package com.example.demotest.demo;
 
 import com.example.demotest.annotation.HandlingTime;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.demotest.service.TestService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("test")
 public class TestController {
+
+    @Autowired
+    private TestService testService;
+
+    /**
+     * controller方法
+     * @return
+     */
+    @RequestMapping("yyy")
+    private String yyy() {
+        System.out.println("testService: " + testService);
+        return testService.running();
+    }
 
     @HandlingTime
     @RequestMapping("qqq")
@@ -35,6 +49,13 @@ public class TestController {
             }
         }
         return "www";
+    }
+
+    @RequestMapping("jsonp")
+    @ResponseBody
+    public String jsonp(@RequestParam("callback") String callback) {
+        System.out.println("jsonp");
+        return callback + "({'result':0})";
     }
 
 }
