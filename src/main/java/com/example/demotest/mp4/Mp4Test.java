@@ -36,7 +36,7 @@ public class Mp4Test {
             e.printStackTrace();
         }*/
 
-        /*try {
+        try {
 
             AudioAttributes audio = new AudioAttributes();// 音频属性
             audio.setCodec("libmp3lame");// libfaac PGM编码
@@ -53,18 +53,12 @@ public class Mp4Test {
             attrs.setFormat("mp4");// 视频格式
             attrs.setAudioAttributes(audio);// 音频属性
             attrs.setVideoAttributes(video);// 视频属性
-            MyEncoder encoder = new MyEncoder();// 创建解码器
+            Encoder encoder = new Encoder();// 创建解码器
             encoder.encode(source, target1, attrs);
             System.out.println("上传成功！！！");
         } catch (EncoderException e) {
             e.printStackTrace();
             System.out.println("文件格式不正确！");
-        }*/
-
-        try {
-            FFMpegUtil.convetor(source.getPath(), target1.getPath());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
     }
