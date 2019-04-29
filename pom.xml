@@ -43,6 +43,14 @@
             <version>1.16.20</version>
         </dependency>
 
+        <dependency>
+            <groupId>jave</groupId>
+            <artifactId>jave</artifactId>
+            <version>102</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/jave-1.0.2.jar</systemPath>
+        </dependency>
+
         <!-- google zxing 生成二维码 -->
         <dependency>
             <groupId>com.google.zxing</groupId>

@@ -171,4 +171,26 @@ public class test {
         System.out.println(System.getProperty("os.name"));
         System.out.println(System.getProperty("os.dir"));
     }
+
+
+    @Test
+    public void test09() throws Exception {
+        try{
+           // int a = 1 / 0;
+            throw new NullPointerException("null 999");
+        }catch (ArithmeticException e) {
+            e.printStackTrace();
+            System.out.println("000");
+            throw new ArithmeticException(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("111");
+            throw new Exception(e.getMessage());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            System.out.println("222");
+            throwable.printStackTrace();
+        }
+    }
+
 }

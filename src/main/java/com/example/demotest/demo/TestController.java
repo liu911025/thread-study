@@ -22,18 +22,11 @@ public class TestController {
         return testService.running();
     }
 
-    @HandlingTime
+    // @HandlingTime
     @RequestMapping("qqq")
     public String qqq(String q) {
-        try {
-            if ("q".equals(q)) {
-                throw new NullPointerException("eqwqwq");
-            }
-            return "success";
-        }catch (Exception e) {
-            System.out.println("最大异常处理!");
-        }
-        return "fail";
+        testService.test01(q);
+        return "success";
     }
 
     @HandlingTime
