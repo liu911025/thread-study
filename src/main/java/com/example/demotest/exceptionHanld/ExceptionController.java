@@ -19,9 +19,7 @@ public class ExceptionController {
 
         e.printStackTrace();
 
-        if (e instanceof NullPointerException) {
-            log.info(e.getMessage());
-        }
+        log.error(e.getMessage(), e);
 
         Map<String, String> result = new HashMap<>();
         result.put("message", e.getMessage());
