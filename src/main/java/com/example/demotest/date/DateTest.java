@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,6 +26,14 @@ public class DateTest {
 
         int i = DateUtils.dateCompare(calendar.getTime(), new Date());
         System.out.println(i);
+    }
+
+    @Test
+    public void test_02() {
+        LocalDate now = LocalDate.now();
+        System.out.println(now.getYear());
+        System.out.println(now.getMonthValue());
+        System.out.println(now.getDayOfMonth());
     }
 
 }
