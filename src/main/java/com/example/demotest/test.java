@@ -2,7 +2,10 @@ package com.example.demotest;
 
 import com.example.demotest.util.EncKeyUtil;
 import org.junit.Test;
+import sun.misc.Unsafe;
 
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -193,4 +196,34 @@ public class test {
         }
     }
 
+    @Test
+    public void test10() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long time = 1557900377;
+        Date date = new Date(time * 1000);
+        String dataFormat = sdf.format(date);
+        System.out.println(dataFormat);
+    }
+
+
+    @Test
+    public void test11() {
+        Unsafe unsafe = getUnsafe();
+        System.out.println("2323");
+    }
+
+    public static Unsafe getUnsafe() {
+
+        Field f = null;
+        try {
+            f = Unsafe.class.getDeclaredField("theUnsafe");
+            f.setAccessible(true);
+            return (Unsafe) f.get(null);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
