@@ -199,8 +199,8 @@ public class test {
     @Test
     public void test10() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long time = 1557900377;
-        Date date = new Date(time * 1000);
+        long time = 1558056748000L;
+        Date date = new Date(time);
         String dataFormat = sdf.format(date);
         System.out.println(dataFormat);
     }
