@@ -1,6 +1,10 @@
 package com.example.demotest;
 
 import com.example.demotest.util.EncKeyUtil;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+import org.junit.Before;
 import org.junit.Test;
 import sun.misc.Unsafe;
 
@@ -8,6 +12,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class test {
 
@@ -225,5 +230,43 @@ public class test {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private List<Student> list = new ArrayList<>();
+
+    @Before
+    public void init() {
+        Student stuA = new Student(1, "A", "M", 184);
+        Student stuB = new Student(2, "B", "G", 163);
+        Student stuC = new Student(3, "C", "M", 175);
+        Student stuD = new Student(4, "D", "G", 158);
+        Student stuE = new Student(5, "E", "M", 170);
+        list.add(stuA);
+        list.add(stuB);
+        list.add(stuC);
+        list.add(stuD);
+        list.add(stuE);
+    }
+
+    @Test
+    public void test12() {
+        List<Student> m = list.stream().filter(s -> s.getSex().equals("M")).collect(Collectors.toList());
+        for (Student s : m) {
+            System.out.println(s.toString());
+        }
+
+        long count = list.stream().filter(s -> s.getHeight() >= 163).count();
+        System.out.println(count);
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    @ToString
+    class Student {
+        int no;
+        String name;
+        String sex;
+        float height;
     }
 }
