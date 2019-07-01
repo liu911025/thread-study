@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import sun.misc.Unsafe;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -268,5 +270,15 @@ public class test {
         String name;
         String sex;
         float height;
+    }
+
+
+    @Test
+    public void test13() {
+        File file = new File(".");
+        System.out.println(file.getAbsoluteFile());
+        File[] files = file.listFiles(File::isHidden);
+        // File[] files = file.listFiles(f -> !f.isHidden());
+        Arrays.asList(files).forEach(f -> System.out.println(f.getName()));
     }
 }

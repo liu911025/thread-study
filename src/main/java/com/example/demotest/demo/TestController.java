@@ -29,9 +29,11 @@ public class TestController {
         return "success";
     }
 
-    @HandlingTime
+    @HandlingTime(value = "计算时间")
     @RequestMapping("www")
     public String www(String q) {
+        String s = (String) null;
+        System.out.println("s:" + s);
         int i = 100;
         while (i > 0) {
             i--;
