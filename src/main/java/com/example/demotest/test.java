@@ -1,6 +1,10 @@
 package com.example.demotest;
 
+import com.example.demotest.pojo.SignFile;
 import com.example.demotest.util.EncKeyUtil;
+import com.example.demotest.vo.RespData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -280,5 +284,30 @@ public class test {
         File[] files = file.listFiles(File::isHidden);
         // File[] files = file.listFiles(f -> !f.isHidden());
         Arrays.asList(files).forEach(f -> System.out.println(f.getName()));
+    }
+
+    @Test
+    public void test14() {
+        int n = 7;
+        int h = 3;
+        System.out.println((n - 1) & h);
+        System.out.println(Integer.toBinaryString(2));
+        System.out.println(~3);
+    }
+
+
+    @Test
+    public void test15() throws JsonProcessingException {
+        List<SignFile> signFiles = new ArrayList<>();
+        SignFile s1 = new SignFile("123456", "协议书1");
+        SignFile s2 = new SignFile("654321", "协议书2");
+        signFiles.add(s1);
+        signFiles.add(s2);
+
+        RespData respData = RespData.buildSuccess(signFiles);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String value = mapper.writeValueAsString(respData);
+        System.out.println(value);
     }
 }

@@ -5,6 +5,10 @@ import com.example.demotest.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @RestController
 @RequestMapping("test")
 public class TestController {
@@ -18,6 +22,13 @@ public class TestController {
      */
     @RequestMapping("yyy")
     private String yyy() {
+        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+        map.put("ljt", "yyp");
+        String yyp = map.get("ljt");
+
+        Map<String, String> hashMap = new HashMap<>();
+        hashMap.put("ljt", "yyp");
+
         System.out.println("testService: " + testService);
         return testService.running();
     }
