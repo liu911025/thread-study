@@ -1,4 +1,4 @@
-package com.example.demotest.demo;
+package com.example.demotest.controller;
 
 import com.example.demotest.annotation.HandlingTime;
 import com.example.demotest.service.TestService;
