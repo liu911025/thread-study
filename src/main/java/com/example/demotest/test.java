@@ -310,4 +310,19 @@ public class test {
         String value = mapper.writeValueAsString(respData);
         System.out.println(value);
     }
+
+    @Test
+    public void test16() throws JsonProcessingException {
+        List<Map<String, String>> list = new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("type", i + "");
+            map.put("image", "078979879878");
+            list.add(map);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        String value = mapper.writeValueAsString(list);
+        System.out.println(value);
+    }
 }

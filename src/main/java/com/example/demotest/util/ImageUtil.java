@@ -88,7 +88,7 @@ public class ImageUtil {
 
 		g2.setFont(new Font("宋体",Font.BOLD,18)); //设置字体:字体、字号、大小
 		g2.setColor(Color.BLACK);//设置背景颜色
-		int i = width / 2;
+		int i = width / 3;
 		g2.drawString(format, i,20); //向图片上写字符串
 		String imagePath = "E:\\upload\\image\\date\\" + format2 + ".jpg";
 		ImageIO.write(bi,"JPEG",new FileOutputStream(imagePath));//保存图片 JPEG表示保存格式
@@ -209,7 +209,7 @@ public class ImageUtil {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String path = "D:\\qm.png";
+		String path = "D:\\zw.png";
 
 		BufferedImage image = ImageIO.read(new FileInputStream(new File(path)));
 
