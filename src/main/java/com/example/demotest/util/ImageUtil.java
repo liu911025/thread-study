@@ -11,12 +11,13 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
 public class ImageUtil {
+
+	private static double width = 435.0;
+	//private int height
 
 	/**
 	 * 去除图片背景
@@ -62,8 +63,16 @@ public class ImageUtil {
 	    }
 	}
 
-	public static String genTimestamp(String datePattern, int width, int height) throws IOException {
-		height = 30;
+	/**
+	 * 生成时间图片
+	 * @param datePattern
+	 * @param width
+	 * @param imagePath
+	 * @return
+	 * @throws IOException
+	 */
+	public static String genTimestamp(String datePattern, int width, String imagePath) throws IOException {
+		int height = 30;
 		//得到图片缓冲区
 		BufferedImage bi = new BufferedImage
 
@@ -83,40 +92,13 @@ public class ImageUtil {
 		LocalDateTime date = LocalDateTime.now();
 		String format = formatter.format(date);
 
-		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String format2 = formatter2.format(date);
-
 		g2.setFont(new Font("宋体",Font.BOLD,18)); //设置字体:字体、字号、大小
 		g2.setColor(Color.BLACK);//设置背景颜色
 		int i = width / 3;
 		g2.drawString(format, i,20); //向图片上写字符串
-		String imagePath = "E:\\upload\\image\\date\\" + format2 + ".jpg";
+		//String imagePath = "E:\\upload\\image\\date\\" + format2 + ".jpg";
 		ImageIO.write(bi,"JPEG",new FileOutputStream(imagePath));//保存图片 JPEG表示保存格式
 		return imagePath;
-	}
-
-
-	/**
-	 * @Description:截图
-	 * @author:liuyc
-	 * @time:2016年5月27日 上午10:18:23
-	 * @param srcFile、targetFile截好后图片全名、startAcross 开始截取位置横坐标、StartEndlong开始截图位置纵坐标、width截取的长，hight截取的高
-	 */
-	public static void cutImage(String srcFile, String targetFile, int startAcross, int StartEndlong, int width,
-								int hight) throws Exception {
-		// 取得图片读入器
-		Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("jpg");
-		ImageReader reader = readers.next();
-		// 取得图片读入流
-		InputStream source = new FileInputStream(srcFile);
-		ImageInputStream iis = ImageIO.createImageInputStream(source);
-		reader.setInput(iis, true);
-		// 图片参数对象
-		ImageReadParam param = reader.getDefaultReadParam();
-		Rectangle rect = new Rectangle(startAcross, StartEndlong, width, hight);
-		param.setSourceRegion(rect);
-		BufferedImage bi = reader.read(0, param);
-		ImageIO.write(bi, targetFile.split("\\.")[1], new File(targetFile));
 	}
 
 	/**
@@ -208,18 +190,98 @@ public class ImageUtil {
 		}
 	}
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String path = "D:\\zw.png";
 
-		BufferedImage image = ImageIO.read(new FileInputStream(new File(path)));
 
-		String timestamp = ImageUtil.genTimestamp("yyyy-MM-dd HH:mm", image.getWidth(), image.getHeight());
+	/**
+	 * 导入本地图片到缓冲区
+	 */
+	public static BufferedImage loadImageLocal(String imgName) {
+		try {
+			return ImageIO.read(new File(imgName));
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+	public static BufferedImage modifyImagetogeter(BufferedImage b, BufferedImage d) {
+		Graphics2D g        = null;
+		try {
+			int w = b.getWidth();
+			int h = b.getHeight();
+
+			g = d.createGraphics();
+			g.drawImage(b, 300, -800, w, h, null);
+			g.dispose();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return d;
+	}
+
+	/**
+	 * 生成新图片到本地
+	 */
+	public static void writeImageLocal(String newImage, BufferedImage img) {
+		if (newImage != null && img != null) {
+			try {
+				File outputfile = new File(newImage);
+				ImageIO.write(img, "jpg", outputfile);
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * 指定长和宽对图片进行缩放
+	 * @throws IOException
+	 */
+	public static String zoomBySize(BufferedImage img, String srcPath, String destPath) throws IOException {
+		//BufferedImage image = ImageIO.read(new FileInputStream(new File(srcPath)));
+
+		double scale = width / img.getWidth();
+
+		double height = img.getHeight() * scale;
+
+		//与按比例缩放的不同只在于,不需要获取新的长和宽,其余相同.
+		Image _img = img.getScaledInstance((int) width, (int) height, Image.SCALE_DEFAULT);
+		BufferedImage image = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics = image.createGraphics();
+		graphics.setColor(Color.WHITE);
+		graphics.fillRect(0, 0, (int) width, (int) height);
+		graphics.drawImage(_img, 0, 0, null);
+		graphics.dispose();
+
+		String ext = srcPath.substring(srcPath.lastIndexOf(".") + 1);
+		OutputStream out = new FileOutputStream(destPath);
+		ImageIO.write(image, ext, out);
+		out.close();
+		return destPath;
+	}
+
+	public static void main(String[] args) throws IOException {
+
+		String path = "E:\\upload\\image\\2.png";
+		BufferedImage scaleImage = ImageIO.read(new FileInputStream(new File(path)));
+		String destPath = path.substring(0 , path.lastIndexOf(".")) + "_scale" + path.substring(path.lastIndexOf("."));
+		String scalePath = zoomBySize(scaleImage, path, destPath);
+
+		BufferedImage image = ImageIO.read(new FileInputStream(new File(scalePath)));
+
+		LocalDateTime date = LocalDateTime.now();
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String format2 = formatter2.format(date);
+		String dateImagePath = "E:\\upload\\image\\date\\" + format2 + ".jpg";
+		String timestamp = ImageUtil.genTimestamp("yyyy年MM月dd日 HH时mm分", image.getWidth(), dateImagePath);
 
 		System.out.println(timestamp);
 
-		List<String> imgs = Arrays.asList(path, timestamp);
+		List<String> imgs = Arrays.asList(scalePath, timestamp);
 		String imagePath = "E:\\upload\\image\\date\\" + UUID.randomUUID().toString().replace("-","") + ".jpg";
 		ImageUtil.mergeImage(imgs, 2, imagePath);
 
+		System.out.println("success");
 	}
 }

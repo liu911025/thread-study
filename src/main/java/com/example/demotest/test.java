@@ -301,8 +301,16 @@ public class test {
         List<SignFile> signFiles = new ArrayList<>();
         SignFile s1 = new SignFile("123456", "协议书1");
         SignFile s2 = new SignFile("654321", "协议书2");
+        SignFile s3 = new SignFile("654321", "协议书2");
         signFiles.add(s1);
         signFiles.add(s2);
+        signFiles.add(s3);
+
+        long count1 = signFiles.stream().filter(s -> "123456".equals(s.getFileCode())).count();
+        long count2 = signFiles.stream().filter(s -> "654321".equals(s.getFileCode())).count();
+
+        System.out.println("count1: " + count1);
+        System.out.println("count2: " + count2);
 
         RespData respData = RespData.buildSuccess(signFiles);
 
