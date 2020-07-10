@@ -72,7 +72,7 @@ public class ImageUtil {
 	 * @throws IOException
 	 */
 	public static String genTimestamp(String datePattern, int width, String imagePath) throws IOException {
-		int height = 30;
+		int height = 35;
 		//得到图片缓冲区
 		BufferedImage bi = new BufferedImage
 
@@ -92,10 +92,10 @@ public class ImageUtil {
 		LocalDateTime date = LocalDateTime.now();
 		String format = formatter.format(date);
 
-		g2.setFont(new Font("宋体",Font.BOLD,18)); //设置字体:字体、字号、大小
+		g2.setFont(new Font("宋体",Font.BOLD,32)); //设置字体:字体、字号、大小
 		g2.setColor(Color.BLACK);//设置背景颜色
 		int i = width / 3;
-		g2.drawString(format, i,20); //向图片上写字符串
+		g2.drawString(format, 0,30); //向图片上写字符串
 		//String imagePath = "E:\\upload\\image\\date\\" + format2 + ".jpg";
 		ImageIO.write(bi,"JPEG",new FileOutputStream(imagePath));//保存图片 JPEG表示保存格式
 		return imagePath;
@@ -261,10 +261,135 @@ public class ImageUtil {
 		return destPath;
 	}
 
-	public static void main(String[] args) throws IOException {
+	/**
+	 * 图片去白色的背景，并裁切
+	 *
+	 * @param image 图片
+	 * @param range 范围 1-255 越大 容错越高 去掉的背景越多
+	 * @return 图片
+	 * @throws Exception 异常
+	 */
+	public static byte[] transferAlpha(Image image, InputStream in, int range) throws Exception {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		try {
+			ImageIcon imageIcon = new ImageIcon(image);
+			BufferedImage bufferedImage = new BufferedImage(imageIcon
+					.getIconWidth(), imageIcon.getIconHeight(),
+					BufferedImage.TYPE_4BYTE_ABGR);
+			Graphics2D g2D = (Graphics2D) bufferedImage.getGraphics();
+			g2D.drawImage(imageIcon.getImage(), 0, 0, imageIcon
+					.getImageObserver());
+			int alpha = 0;
+			int minX = bufferedImage.getWidth();
+			int minY = bufferedImage.getHeight();
+			int maxX = 0;
+			int maxY = 0;
 
-		String path = "E:\\upload\\image\\2.png";
-		BufferedImage scaleImage = ImageIO.read(new FileInputStream(new File(path)));
+			for (int j1 = bufferedImage.getMinY(); j1 < bufferedImage
+					.getHeight(); j1++) {
+				for (int j2 = bufferedImage.getMinX(); j2 < bufferedImage
+						.getWidth(); j2++) {
+					int rgb = bufferedImage.getRGB(j2, j1);
+
+					int R = (rgb & 0xff0000) >> 16;
+					int G = (rgb & 0xff00) >> 8;
+					int B = (rgb & 0xff);
+					if (((255 - R) < range) && ((255 - G) < range) && ((255 - B) < range)) { //去除白色背景；
+						rgb = ((alpha + 1) << 24) | (rgb & 0x00ffffff);
+					} else {
+						minX = minX <= j2 ? minX : j2;
+						minY = minY <= j1 ? minY : j1;
+						maxX = maxX >= j2 ? maxX : j2;
+						maxY = maxY >= j1 ? maxY : j1;
+					}
+					bufferedImage.setRGB(j2, j1, rgb);
+				}
+			}
+			int width = maxX - minX+3;
+			int height = maxY - minY+3;
+			System.out.println(height+"==="+minY);
+			BufferedImage sub = bufferedImage.getSubimage(minX, minY, width, height);
+			sub = rotateImage(sub,0);
+			ImageIO.write(sub, "png", byteArrayOutputStream);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+		return byteArrayOutputStream.toByteArray();
+	}
+
+	/**
+	 * 图片旋转
+	 * @param bufferedimage bufferedimage
+	 * @param degree 旋转的角度
+	 * @return BufferedImage
+	 */
+	public static BufferedImage rotateImage(final BufferedImage bufferedimage,
+											final int degree) {
+		int w = bufferedimage.getWidth();
+		int h = bufferedimage.getHeight();
+		Rectangle rect_des = CalcRotatedSize(new Rectangle(new Dimension(
+				w, h)), degree);
+		int type = bufferedimage.getColorModel().getTransparency();
+		BufferedImage img;
+		Graphics2D graphics2d;
+		(graphics2d = (img = new BufferedImage(rect_des.width, rect_des.height, type))
+				.createGraphics()).setRenderingHint(
+				RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2d.translate((rect_des.width - w) / 2,
+				(rect_des.height - h) / 2);
+		graphics2d.rotate(Math.toRadians(degree), w / 2, h / 2);
+		graphics2d.drawImage(bufferedimage, 0, 0, null);
+		graphics2d.dispose();
+		return img;
+	}
+
+	/**
+	 * 计算旋转后图像的大小
+	 * @param src  Rectangle
+	 * @param degree 旋转的角度
+	 * @return Rectangle
+	 */
+	public static Rectangle CalcRotatedSize(Rectangle src, int degree) {
+		if (degree >= 90) {
+			if(degree / 90 % 2 == 1){
+				int temp = src.height;
+				src.height = src.width;
+				src.width = temp;
+			}
+			degree = degree % 90;
+		}
+
+		double r = Math.sqrt(src.height * src.height + src.width * src.width) / 2;
+		double len = 2 * Math.sin(Math.toRadians(degree) / 2) * r;
+		double angel_alpha = (Math.PI - Math.toRadians(degree)) / 2;
+		double angel_dalta_width = Math.atan((double) src.height / src.width);
+		double angel_dalta_height = Math.atan((double) src.width / src.height);
+
+		int len_dalta_width = (int) (len * Math.cos(Math.PI - angel_alpha
+				- angel_dalta_width));
+		int len_dalta_height = (int) (len * Math.cos(Math.PI - angel_alpha
+				- angel_dalta_height));
+		int des_width = src.width + len_dalta_width * 2;
+		int des_height = src.height + len_dalta_height * 2;
+		return new java.awt.Rectangle(new Dimension(des_width, des_height));
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		String path = "E:\\upload\\image\\wx.png";
+
+		BufferedImage image1 = ImageIO.read(new FileInputStream(new File(path)));
+		byte[] imgbyte = transferAlpha(image1, null, 255);
+		OutputStream os = new FileOutputStream("E:\\321.jpg");
+		os.write(imgbyte, 0, imgbyte.length);
+		os.flush();
+		os.close();
+
+		/*BufferedImage scaleImage = ImageIO.read(new FileInputStream(new File("E:\\321.jpg")));
 		String destPath = path.substring(0 , path.lastIndexOf(".")) + "_scale" + path.substring(path.lastIndexOf("."));
 		String scalePath = zoomBySize(scaleImage, path, destPath);
 
@@ -283,5 +408,36 @@ public class ImageUtil {
 		ImageUtil.mergeImage(imgs, 2, imagePath);
 
 		System.out.println("success");
+
+		File file = new File(imagePath);
+		String resultPath = "E:\\123.jpg";
+		transApla(file, resultPath);*/
+
+		/*String imagePath = "E:\\123.jpg";
+		BufferedImage image = ImageIO.read(new FileInputStream(new File(imagePath)));
+		byte[] imgbyte = transferAlpha(image, null, 80);
+		OutputStream os = new FileOutputStream("E:\\321.jpg");
+		os.write(imgbyte, 0, imgbyte.length);
+		os.flush();
+		os.close();*/
+	}
+
+
+	/**
+	 * 图片格式转换
+	 * @param srcImageFile
+	 * @param formatName
+	 * @param destImageFile
+	 */
+	public static void convert(String srcImageFile, String formatName, String destImageFile) {
+		try {
+			File f = new File(srcImageFile);
+			f.canRead();
+			f.canWrite();
+			BufferedImage src = ImageIO.read(f);
+			ImageIO.write(src, formatName, new File(destImageFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

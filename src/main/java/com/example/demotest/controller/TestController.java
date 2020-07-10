@@ -1,11 +1,18 @@
 package com.example.demotest.controller;
 
 import com.example.demotest.annotation.HandlingTime;
+import com.example.demotest.pojo.SignFile;
 import com.example.demotest.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +22,12 @@ public class TestController {
 
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("#{'${people.age}'.split(',')}")
+    private List<Integer> ageList = new ArrayList<>();
 
     /**
      * controller方法
@@ -64,4 +77,23 @@ public class TestController {
         return callback + "({'result':0})";
     }
 
+
+    @RequestMapping(value = "/signFile", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE},
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @ResponseBody
+    public SignFile creditLoanApplyNotify(@RequestBody SignFile req) {
+        System.out.println(123);
+        return req;
+
+    }
+
+    @RequestMapping("restTemplate")
+    @ResponseBody
+    public String restTemplate() {
+        String url = "https://caservice.linksign.cn:9011/api/account/license";
+        HttpEntity<String> reqEntity = new HttpEntity<>("123");
+        String respResult = restTemplate.postForObject(url, reqEntity, String.class);
+        return "123";
+    }
 }

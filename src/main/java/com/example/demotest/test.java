@@ -1,24 +1,57 @@
 package com.example.demotest;
 
+import cn.hutool.core.util.HashUtil;
+import cn.hutool.core.util.IdcardUtil;
+import cn.hutool.core.util.XmlUtil;
+import cn.hutool.core.util.ZipUtil;
+import cn.hutool.crypto.digest.DigestAlgorithm;
+import cn.hutool.crypto.digest.Digester;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
 import com.example.demotest.pojo.SignFile;
+import com.example.demotest.service.Defaulable;
+import com.example.demotest.service.DefaulableFactory;
+import com.example.demotest.service.impl.DefaulableImpl;
+import com.example.demotest.service.impl.OverridableImpl;
+import com.example.demotest.util.Base64Util;
+import com.example.demotest.util.DecryptionZipUtil;
 import com.example.demotest.util.EncKeyUtil;
+import com.example.demotest.util.ImageUtil;
 import com.example.demotest.vo.RespData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import de.idyl.winzipaes.AesZipFileDecrypter;
+import de.idyl.winzipaes.impl.AESDecrypter;
+import de.idyl.winzipaes.impl.AESDecrypterBC;
+import de.idyl.winzipaes.impl.ExtZipEntry;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import org.dom4j.DocumentHelper;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.*;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import sun.misc.Unsafe;
 
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 
 public class test {
 
@@ -333,4 +366,295 @@ public class test {
         String value = mapper.writeValueAsString(list);
         System.out.println(value);
     }
+
+
+    // sz000050link3622
+    // sz000050link3622
+    @Test
+    public void test17() {
+        String userCode = "sz000050";
+        String idNumber = "36222719961025151X";
+        String s = (userCode + "link" + idNumber).substring(0, 16);
+        System.out.println(s);
+    }
+
+    //172.16.1.253:8076 --> 192.168.1.76:8080
+    //172.16.1.253:8077 --> 192.168.1.77:8080
+    //172.16.1.253:8078 --> 192.168.1.78:8080
+    private String host = "172.16.1.253:8076/8077/8078";
+
+    //
+    //192.168.1.77:8080
+    //192.168.1.78:8080
+    private String tager = "192.168.1.76/1.77/1.78:8080";
+
+    private String callBackUrl_1 = "http://172.16.1.253:8076/xxxxx.do";
+    private String callBackUrl_2 = "http://172.16.1.253:8077/xxxxx.do";
+    private String callBackUrl_3 = "http://172.16.1.253:8078/xxxxx.do";
+
+    private static Map<String, String> hostMap = new HashMap<String, String>() {
+        {
+            put("172.16.1.253:8076", "192.168.1.76:8080");
+            put("172.16.1.253:8077", "192.168.1.77:8080");
+            put("172.16.1.253:8078", "192.168.1.78:8080");
+        }
+    };
+
+    @Test
+    public void test18() {
+        String callBackUrl = callBackUrl_3;
+        for (String host : hostMap.keySet()) {
+            if (callBackUrl.contains(host)) {
+                System.out.println("原路径:" + callBackUrl);
+                callBackUrl = callBackUrl.replace(host, hostMap.get(host));
+                System.out.println("替换路径:" + callBackUrl);
+                break;
+            }
+        }
+    }
+    @Test
+    public void test19() {
+       String idCard = "36222719911025151X";
+        boolean validCard = IdcardUtil.isValidCard(idCard);
+        System.out.println(validCard);
+       long num = 36222719911025151L;
+
+        System.out.println(num % 11);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long time = 1568952838L;
+        Date date = new Date(time * 1000);
+        String format = sdf.format(date);
+        System.out.println(format);
+    }
+
+    @Test
+    public void test20() {
+        /*String srcPath = "E:\\upload\\sz000064_0.jpg";
+        String target = "E:\\upload\\tmp\\sz000064_0.jpg";
+        String srcBase64 = Base64Util.fileToBase64(srcPath);
+        System.out.println("srcBase64:" + srcBase64);
+        ImageUtil.convert(srcPath, "jpg", target);
+        String targetBase64 = Base64Util.fileToBase64(target);
+        System.out.println("targetBase64:" + targetBase64);*/
+        String imageType = "jpg2";
+        if (!("PNG".equalsIgnoreCase(imageType) || "JPG".equalsIgnoreCase(imageType))) {
+            System.out.println("if");
+        }
+        System.out.println("...");
+    }
+
+    @Test
+    public void test21() {
+        String data = "QY_20191119_DATA";
+        //String data = "QY_20191021_DATA";
+        Digester md5 = new Digester(DigestAlgorithm.MD5);
+        String digestHex = md5.digestHex(data);
+        System.out.println(digestHex);
+        System.out.println(digestHex.length());
+
+        char[] chars = digestHex.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i <chars.length ; i++) {
+            int index = i + 1;
+            if (9 == index || 13 == index || 17 == index || 21 == index) {
+                sb.append("-");
+            }
+            sb.append(chars[i]);
+        }
+        String result = sb.toString();
+        System.out.println(result);
+
+        String aa = "f6b2d1a2-ccb1-a4ed-568f-87ef3e11d0fa";
+        System.out.println(aa.equals(result));
+    }
+
+    @Test
+    public void test22() throws IOException, DataFormatException {
+
+        String fileName = "9ecbba86-3b24-b7d5-8d36-52237a92dda0";
+        String zipPath = "D:/" + fileName + ".zip";
+        long currentTimeMillis = System.currentTimeMillis();
+        String target = "D:/zipPath" + File.separator + currentTimeMillis + ".zip";
+        /*try {
+            AESDecrypter aes = new AESDecrypter();
+            AesZipFileDecrypter zipFileDecrypter = new AesZipFileDecrypter(new File(zipPath), );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        /*AESDecrypterBC aesDecrypterBC = new AESDecrypterBC();
+        AesZipFileDecrypter zipFile = new AesZipFileDecrypter( new File(zipPath), aesDecrypterBC);
+        AesZipFileDecrypter.charset = "utf-8";
+        *//*ExtZipEntry entry = zipFile.getEntry( "zipSpecification.txt" );
+        zipFile.extractEntry( entry, new File("doc/zipSpecification.txt"), "foo" );*//*
+        List<ExtZipEntry> entryList = zipFile.getEntryList();
+        for (ExtZipEntry entry: entryList) {
+            zipFile.extractEntry();
+            String fileName = entry.getCentralDirectoryEntry().getFileName();
+            System.out.println(fileName);
+        }*/
+
+        SecretKeySpec keySpec = new SecretKeySpec(DecryptionZipUtil.getUTF8Bytes("QIYEDATACHANGTMP"), "AES");
+        IvParameterSpec iv = new IvParameterSpec(DecryptionZipUtil.getUTF8Bytes("QiYeDataChangTmp"));
+        DecryptionZipUtil.decryptFile(keySpec, iv, new File(zipPath), new File(target));
+
+        String unzipTarget = "D:/zipPath" + File.separator + currentTimeMillis;
+        File unzip = ZipUtil.unzip(target, unzipTarget, Charset.forName("GBK"));
+        File[] files = unzip.listFiles();
+        for(File file : files) {
+            System.out.println(file.getPath());
+
+            ArrayList<String> list = DecryptionZipUtil.readCsv(file.getPath());
+            System.out.println(JSON.toJSONString(list));
+        }
+    }
+
+    @Test
+    public void test23() {
+        testZhaoBiaoXiangMu();
+    }
+
+    private static void testZhaoBiaoXiangMu(){
+//参数
+        String queryType = "1";
+        String qiYeCode = "1007";
+        String qiYeName = "";
+        String caType = "SZCA";
+        String checkCode = "dd9f68c7-8d9b-456f-9639-772e50bb61b5";
+//http请求参数
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("queryType", queryType);
+        params.put("qiYeCode", qiYeCode);
+        params.put("qiYeName", qiYeName);
+        params.put("caType", caType);
+        params.put("checkCode", checkCode);
+
+        try {
+            /*String json = HttpUtil.post(
+                    "http://10.1.128.1:8080/jy-zhaobiao/interact/queryQiYeInfo.do",
+                    params);*/
+            String json = HttpUtil.post("http://220.163.129.150:10080/jy-zhaobiao/interact/queryQiYeInfo.do", params);
+            System.out.println(json);
+            /*Document document = XmlUtil.parseXml(json);
+            Element element = document.getDocumentElement();*/
+            //parse4Dom(json);
+            org.dom4j.Document document = DocumentHelper.parseText(json);
+            org.dom4j.Element root = document.getRootElement();
+            org.dom4j.Element qiYeInfoList = root.element("QiYeInfoList");
+            Iterator iter = qiYeInfoList.elementIterator();
+            //Iterator iter = root.elementIterator("QiYeInfoList");
+            while (iter.hasNext()) {
+                org.dom4j.Element ele = (org.dom4j.Element) iter.next();
+                String qiYe_code = ele.elementText("QiYe_Code");
+                String qiYe_name = ele.elementText("QiYe_Name");
+                String faRen_name = ele.elementText("FaRen_Name");
+                String faRen_shenFenZheng_bh = ele.elementText("FaRen_ShenFenZheng_BH");
+                String faRen_phone = ele.elementText("FaRen_Phone");
+                String faRen_mobile = ele.elementText("FaRen_Mobile");
+                String lianXiRen_name = ele.elementText("LianXiRen_Name");
+                String lianXiRen_phone = ele.elementText("LianXiRen_Phone");
+                String lianXiRen_mobile = ele.elementText("LianXiRen_Mobile");
+
+                System.out.println(qiYe_code);
+                System.out.println(qiYe_name);
+                System.out.println(faRen_name);
+                System.out.println(faRen_shenFenZheng_bh);
+                System.out.println(faRen_phone);
+                System.out.println(faRen_mobile);
+                System.out.println(lianXiRen_name);
+                System.out.println(lianXiRen_phone);
+                System.out.println(lianXiRen_mobile);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void parse4Dom(String xmlStr) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(new InputSource(new StringReader(xmlStr)));
+        Element message = doc.getDocumentElement();
+        NodeList list = message.getChildNodes();
+        if (list != null) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                System.out.println("节点=" + node.getNodeName() + "\ttext="
+                        + node.getFirstChild().getNodeValue());
+            }
+        }
+    }
+
+
+    @Test
+    public void test24() {
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now);
+        LocalDateTime start = LocalDateTime.of(2019, 12, 6, 14, 43);
+        System.out.println(start);
+        LocalDateTime end = LocalDateTime.of(2019, 12, 6, 15, 00);
+        System.out.println(end);
+
+        System.out.println(now.isAfter(start));
+        System.out.println(now.isAfter(end));
+    }
+
+    @Test
+    public void test25(){
+        String str = "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";
+        System.out.println(str.length());
+    }
+
+
+    @Test
+    public void test26() {
+        Defaulable defaulableImpl = DefaulableFactory.create(DefaulableImpl::new);
+        System.out.println(defaulableImpl.notRequired());
+
+        System.out.println("--------------------");
+
+        Defaulable overridableImpl = DefaulableFactory.create(OverridableImpl::new);
+        System.out.println(overridableImpl.notRequired());
+    }
+
+    @Test
+    public void test27() {
+        System.out.println(null == null);
+    }
+
+    @Test
+    public void test28() {
+
+        int a = 0, b = 0;
+        int n = 3;
+        for(int i = 0; i < n; i++) {            // 循环次数为 n
+            a++;
+            for(int j = 0; j < n; j++) {        // 循环次数为 n
+                b++;
+                System.out.println("Hello, World!");      // 循环体时间复杂度为 O(1)
+            }
+        }
+        System.out.println("a:" + a);
+        System.out.println("b:" + b);
+    }
+
+
+    @Test
+    public void test29() {
+        int n = 8;
+        int a = 0;
+        for (int i = 2; i < n; i++) {
+            System.out.println("i-->>" + i);
+            a++;
+            //i *= 2;
+            i = 2 * i;
+            System.out.println(String.format("i=%s", i));
+        }
+        System.out.println("a:" + a);
+    }
+    // 2^t < n
 }
