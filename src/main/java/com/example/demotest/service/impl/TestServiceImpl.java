@@ -25,8 +25,7 @@ public class TestServiceImpl implements TestService {
         }/*catch (ArithmeticException e) {
             log.info("test01异常, 异常信息为: {}" + e.getMessage(), e);
             throw new ArithmeticException(e.getMessage());
-        }*/
-        catch (Exception e) {
+        }*/ catch (Exception e) {
             log.info("test01异常, 异常信息为: {}" + e.getMessage(), e);
             throw new NullPointerException(e.getMessage());
         }

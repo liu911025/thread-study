@@ -1,7 +1,6 @@
 package com.example.demotest.vo;
 
 
-
 /**
  * Created by Cetacean on 2019/2/20 14:50
  */
@@ -39,7 +38,7 @@ public class RespData<T> {
      *
      * @return
      */
-    public static<T> RespData buildSuccess(T t) {
+    public static <T> RespData buildSuccess(T t) {
         RespData respData = new RespData();
         respData.setMessage("success");
         respData.setStatus("0");

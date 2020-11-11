@@ -34,11 +34,12 @@ public class DecryptionZipUtil {
 
     /**
      * 使用指定密码将给定文件或文件夹压缩成指定的输出ZIP文件
-     * @param srcFile 需要压缩的文件或文件夹
+     *
+     * @param srcFile  需要压缩的文件或文件夹
      * @param destPath 输出路径
-     * @param passwd 压缩文件使用的密码
+     * @param passwd   压缩文件使用的密码
      */
-    public static void zip(String srcFile,String destPath,String passwd) {
+    public static void zip(String srcFile, String destPath, String passwd) {
         AESEncrypter encrypter = new AESEncrypterBC();
         AesZipFileEncrypter zipFileEncrypter = null;
         try {
@@ -71,10 +72,11 @@ public class DecryptionZipUtil {
 
     /**
      * 具体压缩方法,将给定文件添加进压缩文件中,并处理压缩文件中的路径
-     * @param file 给定磁盘文件(是文件直接添加,是目录递归调用添加)
-     * @param encrypter AesZipFileEncrypter实例,用于输出加密ZIP文件
+     *
+     * @param file         给定磁盘文件(是文件直接添加,是目录递归调用添加)
+     * @param encrypter    AesZipFileEncrypter实例,用于输出加密ZIP文件
      * @param pathForEntry ZIP文件中的路径
-     * @param passwd 压缩密码
+     * @param passwd       压缩密码
      * @throws IOException
      */
     private static void doZip(File file, AesZipFileEncrypter encrypter,
@@ -85,13 +87,14 @@ public class DecryptionZipUtil {
             return;
         }
         pathForEntry += file.getName() + File.separator;
-        for(File subFile : file.listFiles()) {
+        for (File subFile : file.listFiles()) {
             doZip(subFile, encrypter, pathForEntry, passwd);
         }
     }
 
     /**
      * 使用给定密码解压指定压缩文件到指定目录
+     *
      * @param inFile 指定Zip文件
      * @param outDir 解压目录
      * @param passwd 解压密码
@@ -112,7 +115,7 @@ public class DecryptionZipUtil {
              * 处理文件夹问题处理可能不太好
              */
             List<ExtZipEntry> entryList = zipDecrypter.getEntryList();
-            for(ExtZipEntry entry : entryList) {
+            for (ExtZipEntry entry : entryList) {
                 String eName = entry.getName();
                 String dir = eName.substring(0, eName.lastIndexOf(File.separator) + 1);
                 File extractDir = new File(outDir, dir);
@@ -143,11 +146,12 @@ public class DecryptionZipUtil {
      * 测试
      * @param args
      */
-/*    public static void main(String[] args) {
-        *//**
-         * 压缩测试
-         * 可以传文件或者目录
-         *//*
+    /*    public static void main(String[] args) {
+     */
+    /**
+     * 压缩测试
+     * 可以传文件或者目录
+     *//*
 //		zip("M:\\ZIP\\test\\bb\\a\\t.txt", "M:\\ZIP\\test\\temp1.zip", "zyh");
 //		zip("M:\\ZIP\\test\\bb", "M:\\ZIP\\test\\temp2.zip", "zyh");
 
@@ -175,9 +179,9 @@ public class DecryptionZipUtil {
             return target;
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                if(fileOutputStream!=null)
+                if (fileOutputStream != null)
                     fileOutputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -245,6 +249,6 @@ public class DecryptionZipUtil {
         SecretKeySpec keySpec = new SecretKeySpec(getUTF8Bytes("QIYEDATACHANGTMP"), "AES");
         IvParameterSpec iv = new IvParameterSpec(getUTF8Bytes("QiYeDataChangTmp"));
 
-        decryptFile(keySpec, iv,new File(source), new File(target));
+        decryptFile(keySpec, iv, new File(source), new File(target));
     }
 }

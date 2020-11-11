@@ -26,14 +26,14 @@ public class BarCodeUtil {
     }
 
     //byte数组到图片
-    public static void byte2image(byte[] data,String path){
-        if(data.length<3||path.equals("")) return;
-        try{
+    public static void byte2image(byte[] data, String path) {
+        if (data.length < 3 || path.equals("")) return;
+        try {
             FileImageOutputStream imageOutput = new FileImageOutputStream(new File(path));
             imageOutput.write(data, 0, data.length);
             imageOutput.close();
             System.out.println("Make Picture success,Please find image in " + path);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception: " + ex);
             ex.printStackTrace();
         }

@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 public class HandlingTimeAspect {
 
     @Pointcut("@annotation(com.example.demotest.annotation.HandlingTime)")
-    public void handlingTimePointcut() {}
+    public void handlingTimePointcut() {
+    }
 
     @Around("handlingTimePointcut() && @annotation(handlingTime)")
     public Object handlingTimeAround(ProceedingJoinPoint joinPoint, HandlingTime handlingTime) throws Exception {
@@ -25,13 +26,13 @@ public class HandlingTimeAspect {
             System.out.println(proceed);
             System.out.println("方法执行时间：" + (System.currentTimeMillis() - startTime));
             return proceed;
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             log.error(e.getMessage(), e);
             throw new NullPointerException(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new Exception(e.getMessage());
-        }catch (Throwable throwable) {
+        } catch (Throwable throwable) {
             log.error(throwable.getMessage(), throwable);
             throwable.printStackTrace();
         }

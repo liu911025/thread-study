@@ -24,7 +24,7 @@ public class Run {
             System.out.println("ThreadName:" + Thread.currentThread().getName());
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             lock.unlock();
         }
     }

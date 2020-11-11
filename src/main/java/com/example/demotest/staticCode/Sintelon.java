@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Sintelon {
 
-    static class TestMap{
+    static class TestMap {
         public static Map<String, Object> map = new HashMap<>();
     }
 

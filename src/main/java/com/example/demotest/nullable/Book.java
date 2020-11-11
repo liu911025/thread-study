@@ -6,7 +6,8 @@ public class Book implements Nullable {
     private String name;
     private double price;
 
-    public Book(){}
+    public Book() {
+    }
 
     public Book(int id, String name, double price) {
         this.id = id;

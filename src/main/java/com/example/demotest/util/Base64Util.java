@@ -54,6 +54,7 @@ public class Base64Util {
 
     /**
      * 将base64转为file并返回
+     *
      * @param destPath
      * @param base64
      * @param fileName
@@ -69,7 +70,7 @@ public class Base64Util {
         BufferedOutputStream bos = null;
         FileOutputStream fos = null;
         try {
-            byte[] bytes = Base64.getDecoder().decode(base64.replace("\r\n",""));
+            byte[] bytes = Base64.getDecoder().decode(base64.replace("\r\n", ""));
 
             file = new File(destPath + File.separator + fileName);
             fos = new FileOutputStream(file);

@@ -50,6 +50,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
@@ -111,22 +113,23 @@ public class test {
     }
 
     /**
- 　　* 将元数据前补零，补后的总长度为指定的长度，以字符串的形式返回
- 　　* @param sourceDate
- 　　* @param formatLength
- 　　* @return 重组后的数据
- 　　*/
-
-    public static String frontCompWithZore(int sourceDate,int formatLength) {
-
-    /*
-     * 0 指前面补充零
-     * formatLength 字符总长度为 formatLength
-     * d 代表为正数。
+     * 　　* 将元数据前补零，补后的总长度为指定的长度，以字符串的形式返回
+     * 　　* @param sourceDate
+     * 　　* @param formatLength
+     * 　　* @return 重组后的数据
+     *
      */
 
-    String newString = String.format("%0"+formatLength+"d", sourceDate);
-    return newString;
+    public static String frontCompWithZore(int sourceDate, int formatLength) {
+
+        /*
+         * 0 指前面补充零
+         * formatLength 字符总长度为 formatLength
+         * d 代表为正数。
+         */
+
+        String newString = String.format("%0" + formatLength + "d", sourceDate);
+        return newString;
     }
 
     @Test
@@ -222,10 +225,10 @@ public class test {
 
     @Test
     public void test09() throws Exception {
-        try{
-           // int a = 1 / 0;
+        try {
+            // int a = 1 / 0;
             throw new NullPointerException("null 999");
-        }catch (ArithmeticException e) {
+        } catch (ArithmeticException e) {
             e.printStackTrace();
             System.out.println("000");
             throw new ArithmeticException(e.getMessage());
@@ -412,12 +415,13 @@ public class test {
             }
         }
     }
+
     @Test
     public void test19() {
-       String idCard = "36222719911025151X";
+        String idCard = "36222719911025151X";
         boolean validCard = IdcardUtil.isValidCard(idCard);
         System.out.println(validCard);
-       long num = 36222719911025151L;
+        long num = 36222719911025151L;
 
         System.out.println(num % 11);
 
@@ -455,7 +459,7 @@ public class test {
 
         char[] chars = digestHex.toCharArray();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i <chars.length ; i++) {
+        for (int i = 0; i < chars.length; i++) {
             int index = i + 1;
             if (9 == index || 13 == index || 17 == index || 21 == index) {
                 sb.append("-");
@@ -502,7 +506,7 @@ public class test {
         String unzipTarget = "D:/zipPath" + File.separator + currentTimeMillis;
         File unzip = ZipUtil.unzip(target, unzipTarget, Charset.forName("GBK"));
         File[] files = unzip.listFiles();
-        for(File file : files) {
+        for (File file : files) {
             System.out.println(file.getPath());
 
             ArrayList<String> list = DecryptionZipUtil.readCsv(file.getPath());
@@ -515,7 +519,7 @@ public class test {
         testZhaoBiaoXiangMu();
     }
 
-    private static void testZhaoBiaoXiangMu(){
+    private static void testZhaoBiaoXiangMu() {
 //参数
         String queryType = "1";
         String qiYeCode = "1007";
@@ -604,7 +608,7 @@ public class test {
     }
 
     @Test
-    public void test25(){
+    public void test25() {
         String str = "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";
         System.out.println(str.length());
     }
@@ -631,9 +635,9 @@ public class test {
 
         int a = 0, b = 0;
         int n = 3;
-        for(int i = 0; i < n; i++) {            // 循环次数为 n
+        for (int i = 0; i < n; i++) {            // 循环次数为 n
             a++;
-            for(int j = 0; j < n; j++) {        // 循环次数为 n
+            for (int j = 0; j < n; j++) {        // 循环次数为 n
                 b++;
                 System.out.println("Hello, World!");      // 循环体时间复杂度为 O(1)
             }
@@ -657,4 +661,21 @@ public class test {
         System.out.println("a:" + a);
     }
     // 2^t < n
+
+    @Test
+    public void test30() {
+        //String pattern = "^[\\u4E00-\\u9FA5A-Za-z]+$";
+        //String pattern = "^[\\u4e00-\\u9fa5]{0,}$";
+        //String pattern = "^[A-Z][a-z]*(\\s[A-Z][a-z]*)*$";
+        /*String pattern = "[\\u4e00-\\u9fa5]";
+        String content = "Fcd";
+        Pattern compile = Pattern.compile(pattern);
+        Matcher matcher = compile.matcher(content);
+        boolean b = matcher.find();
+        System.out.println(b);*/
+
+        String u = "user_name= 朱晓梅";
+        boolean contains = u.contains(" ");
+        System.out.println(contains);
+    }
 }

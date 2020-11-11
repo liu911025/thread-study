@@ -21,16 +21,17 @@ public class UrlToQRCode {
 
     /**
      * 生成二维码，返回到页面上
+     *
      * @param url
      */
     public static String getErWeiCode(String url) throws Exception {
-        if(StringUtils.isNotBlank(url)) {
+        if (StringUtils.isNotBlank(url)) {
             try {
                 int width = 200;
                 int height = 200;
                 QRCodeWriter writer = new QRCodeWriter();
                 BitMatrix bitMatrix = writer.encode(url, BarcodeFormat.QR_CODE, height, width);
-                String imgPath =  "E:\\qr\\" + UUID.randomUUID().toString() + ".png";
+                String imgPath = "E:\\qr\\" + UUID.randomUUID().toString() + ".png";
                 File file = new File(imgPath);
                 if (file.exists() || ((file.getParentFile().exists() || file.getParentFile().mkdirs()) && file.createNewFile())) {
                     writeToFile(bitMatrix, "png", file);

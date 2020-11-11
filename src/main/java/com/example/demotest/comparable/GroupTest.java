@@ -21,12 +21,11 @@ public class GroupTest {
     }
 
     /**
+     * @param datas
+     * @param c     是否为同一组的判断标准
+     * @return
      * @author puyf
      * @Description:按条件分组
-     * @param datas
-     * @param c
-     *            是否为同一组的判断标准
-     * @return
      */
     public static <T> List<List<T>> divider(Collection<T> datas, Comparator<? super T> c) {
         List<List<T>> result = new ArrayList<>();

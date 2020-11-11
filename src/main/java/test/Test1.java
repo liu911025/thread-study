@@ -7,13 +7,13 @@ public class Test1 {
     @Test
     public void test1() {
         int count = 0;
-        int x=91, y=100;
-        while(y>0) {
+        int x = 91, y = 100;
+        while (y > 0) {
             count++;
-            if(x>100) {
-                x=x-10;
+            if (x > 100) {
+                x = x - 10;
                 y--;
-            }else {
+            } else {
                 x++;
             }
             System.out.println("x:" + x + "y:" + y);

@@ -14,26 +14,20 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
  * @author xdwang
- *
  * @create 2012-11-19 下午6:24:03
- *
  * @email:xdwangiflytek@gmail.com
- *
  * @description 上传帮助类
- *
  */
 public class UploadHelper {
 
     /**
+     * @param request
+     * @param maxLength    文件最大限制
+     * @param allowExtName 不允许上传的文件扩展名
+     * @return MultipartFile集合
      * @descrption 根据HttpServletRequest对象获取MultipartFile集合
      * @author xdwang
      * @create 2012-11-19下午5:11:41
-     * @param request
-     * @param maxLength
-     *            文件最大限制
-     * @param allowExtName
-     *            不允许上传的文件扩展名
-     * @return MultipartFile集合
      */
     public static List<MultipartFile> getFileSet(HttpServletRequest request,
                                                  long maxLength, String[] allowExtName) {
@@ -59,16 +53,13 @@ public class UploadHelper {
     }
 
     /**
+     * @param file MultipartFile对象
+     * @param path 保存路径，如“D:\\File\\”
+     * @return 保存的全路径 如“D:\\File\\2345678.txt”
+     * @throws Exception 文件保存失败
      * @descrption 保存文件
      * @author xdwang
      * @create 2012-11-19下午4:17:36
-     * @param file
-     *            MultipartFile对象
-     * @param path
-     *            保存路径，如“D:\\File\\”
-     * @return 保存的全路径 如“D:\\File\\2345678.txt”
-     * @throws Exception
-     *             文件保存失败
      */
     public static String uploadFile(MultipartFile file, String path)
             throws Exception {
@@ -91,16 +82,13 @@ public class UploadHelper {
     }
 
     /**
+     * @param file         MultipartFile对象
+     * @param maxLength    文件最大限制
+     * @param allowExtName 不允许上传的文件扩展名
+     * @return 文件格式是否合法
      * @descrption 验证文件格式，这里主要验证后缀名
      * @author xdwang
      * @create 2012-11-19下午4:08:12
-     * @param file
-     *            MultipartFile对象
-     * @param maxLength
-     *            文件最大限制
-     * @param allowExtName
-     *            不允许上传的文件扩展名
-     * @return 文件格式是否合法
      */
     private static boolean validateFile(MultipartFile file, long maxLength,
                                         String[] allowExtName) {

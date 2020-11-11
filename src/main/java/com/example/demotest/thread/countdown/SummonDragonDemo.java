@@ -12,7 +12,7 @@ public class SummonDragonDemo {
     public static void main(String[] args) throws InterruptedException {
 
         for (int i = 1; i <= count; i++) {
-            int index= i;
+            int index = i;
             new Thread(() -> {
                 try {
                     System.out.println("i:" + index);

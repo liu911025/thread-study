@@ -33,6 +33,7 @@ public class PicUtils {
 
     /**
      * 按比例对图片进行缩放.
+     *
      * @param scale 缩放比例
      * @throws IOException
      */
@@ -58,7 +59,8 @@ public class PicUtils {
 
     /**
      * 指定长和宽对图片进行缩放
-     * @param width 长
+     *
+     * @param width  长
      * @param height 宽
      * @throws IOException
      */

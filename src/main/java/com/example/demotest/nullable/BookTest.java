@@ -7,7 +7,7 @@ public class BookTest {
         Book book = BookService.getBook(-1);
         if (book.isNull()) {
             System.out.println("not found");
-        }else {
+        } else {
             System.out.println(book.toString());
         }
     }

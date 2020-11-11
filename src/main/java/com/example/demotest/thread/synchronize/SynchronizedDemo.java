@@ -6,6 +6,6 @@ public class SynchronizedDemo {
         test();
     }
 
-    public static synchronized void test(){
+    public static synchronized void test() {
     }
 }

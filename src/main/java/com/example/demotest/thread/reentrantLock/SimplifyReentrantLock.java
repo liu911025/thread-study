@@ -53,16 +53,23 @@ public class SimplifyReentrantLock implements Lock {
     }
 
     @Override
-    public void unlock() { sync.release(1); }
+    public void unlock() {
+        sync.release(1);
+    }
 
     @Override
-    public Condition newCondition() { return sync.newCondition(); }
+    public Condition newCondition() {
+        return sync.newCondition();
+    }
 
     @Override
-    public boolean tryLock() { return sync.tryAcquire(1); }
+    public boolean tryLock() {
+        return sync.tryAcquire(1);
+    }
 
     @Override
-    public void lockInterruptibly() throws InterruptedException { }
+    public void lockInterruptibly() throws InterruptedException {
+    }
 
     @Override
     public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {

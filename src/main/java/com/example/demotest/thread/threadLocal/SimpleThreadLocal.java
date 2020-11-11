@@ -8,7 +8,7 @@ public class SimpleThreadLocal<T> {
 
     private static Map<Thread, Object> valueMap = Collections.synchronizedMap(new HashMap<>());
 
-    public T set(T val){
+    public T set(T val) {
         Thread thread = Thread.currentThread();
         T t = (T) valueMap.get(thread);
         valueMap.put(thread, val);

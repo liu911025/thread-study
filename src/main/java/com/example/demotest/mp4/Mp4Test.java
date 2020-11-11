@@ -47,7 +47,7 @@ public class Mp4Test {
             video.setCodec("mpeg4");// 视频编码
             video.setBitRate(new Integer(22050));// 视频比特率
             video.setFrameRate(new Integer(30));// 帧率
-            video.setSize(new VideoSize(1920,1080));// 视频宽高
+            video.setSize(new VideoSize(1920, 1080));// 视频宽高
             EncodingAttributes attrs = new EncodingAttributes();// 转码属性
 
             attrs.setFormat("mp4");// 视频格式

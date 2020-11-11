@@ -10,28 +10,28 @@ import java.util.concurrent.*;
 
 /**
  * SimpleDateFormat线程不安全
- *
+ * <p>
  * 解决方法:
- *      1.使用局部变量
- *      2.加同步锁
- *      3.使用ThreadLocal
- *          SimpleDateFormat的创建过程可以改为延迟加载
- *      private static ThreadLocal<SimpleDateFormat> simpleDateFormatThreadLocal = new ThreadLocal<SimpleDateFormat>() {
- *     @Override
- *     protected SimpleDateFormat initialValue() {
- *         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
- *     }
- * };
- *      4.JAVA 8 使用DateTimeFormatter
+ * 1.使用局部变量
+ * 2.加同步锁
+ * 3.使用ThreadLocal
+ * SimpleDateFormat的创建过程可以改为延迟加载
+ * private static ThreadLocal<SimpleDateFormat> simpleDateFormatThreadLocal = new ThreadLocal<SimpleDateFormat>() {
  *
- *      //解析日期String
- *      dateStr= "2016年10月25日";DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
- *      LocalDate date= LocalDate.parse(dateStr, formatter);
- *      //日期转换为字符串
- *      LocalDateTime now = LocalDateTime.now();
- *      DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy年MM月dd日 hh:mm a");
- *      String nowStr = now .format(format);
- *      System.out.println(nowStr);
+ * @Override protected SimpleDateFormat initialValue() {
+ * return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+ * }
+ * };
+ * 4.JAVA 8 使用DateTimeFormatter
+ * <p>
+ * //解析日期String
+ * dateStr= "2016年10月25日";DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
+ * LocalDate date= LocalDate.parse(dateStr, formatter);
+ * //日期转换为字符串
+ * LocalDateTime now = LocalDateTime.now();
+ * DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy年MM月dd日 hh:mm a");
+ * String nowStr = now .format(format);
+ * System.out.println(nowStr);
  */
 
 public class SimpleDateFormatDemo {
@@ -48,8 +48,10 @@ public class SimpleDateFormatDemo {
     private static ExecutorService pool = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>(1024), new ThreadPoolExecutor.AbortPolicy());
     /**
-     * 定义一个CountDownLatch，保证所有子线程执行完之后主线程再执行 */
+     * 定义一个CountDownLatch，保证所有子线程执行完之后主线程再执行
+     */
     private static CountDownLatch countDownLatch = new CountDownLatch(100);
+
     public static void main(String[] args) { //定义一个线程安全的HashSet
         Set<String> dates = Collections.synchronizedSet(new HashSet<String>());
         for (int i = 0; i < 100; i++) { //获取当前时间

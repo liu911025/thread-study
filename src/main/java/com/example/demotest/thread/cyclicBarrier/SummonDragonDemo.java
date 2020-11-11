@@ -4,7 +4,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 /**
- *  CyclicBarrier 栅栏
+ * CyclicBarrier 栅栏
  */
 public class SummonDragonDemo {
 
@@ -14,8 +14,8 @@ public class SummonDragonDemo {
 
         //设置第一个屏障点，等待召集齐7位法师
         CyclicBarrier callMasterBarrier = new CyclicBarrier(THREAD_COUNT_NUM, () -> {
-                System.out.println("7个法师召集完毕，同时出发，去往不同地方寻找龙珠！");
-                summonDragon();
+            System.out.println("7个法师召集完毕，同时出发，去往不同地方寻找龙珠！");
+            summonDragon();
         });
         //召集齐7位法师
         for (int i = 1; i <= THREAD_COUNT_NUM; i++) {

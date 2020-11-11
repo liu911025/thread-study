@@ -23,7 +23,7 @@ import java.util.List;
 public class UploadController {
 
 
-    @RequestMapping(value="/uploadFile/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadFile/upload", method = RequestMethod.POST)
     public String uploadFile(HttpServletRequest request,
                              HttpServletResponse response) {
         List<MultipartFile> multipartFiles = UploadHelper.getFileSet(request, 1024 * 20, null);
@@ -45,7 +45,7 @@ public class UploadController {
     }
 
 
-    @RequestMapping(value="/uploadFile/upload2", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadFile/upload2", method = RequestMethod.POST)
     public String uploadFile2(@RequestParam("file") MultipartFile[] files, HttpServletRequest request) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String format = sdf.format(new Date());
