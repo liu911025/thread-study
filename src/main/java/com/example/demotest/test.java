@@ -8,6 +8,7 @@ import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.example.demotest.pojo.Car;
 import com.example.demotest.pojo.SignFile;
 import com.example.demotest.service.Defaulable;
 import com.example.demotest.service.DefaulableFactory;
@@ -677,5 +678,60 @@ public class test {
         String u = "user_name= 朱晓梅";
         boolean contains = u.contains(" ");
         System.out.println(contains);
+    }
+
+    /**
+     * MD5
+     */
+    @Test
+    public void test31() {
+        System.out.println(00001010 & 00010000);
+    }
+
+    @Test
+    public void test32() {
+        List<Car> carList_01 = new ArrayList<>();
+        List<Car> carList_02 = new ArrayList<>();
+
+        carList_01.add(new Car(1, "aa", 0));
+        carList_01.add(new Car(2, "bb", 0));
+        carList_01.add(new Car(3, "cc", 5));
+        carList_01.add(new Car(4, "dd", 0));
+
+        carList_02.add(new Car(5, "aa", 1));
+        carList_02.add(new Car(1, "ee", 9));
+        carList_02.add(new Car(6, "cc", 1));
+        carList_02.add(new Car(7, "ff", 2));
+
+
+        List<Car> carList_03 = new ArrayList<>();
+        for (Car c : carList_01) {
+            List<Car> list1 = carList_02.stream().filter(c_02 -> c_02.getId().equals(c.getExternalId())).collect(Collectors.toList());
+            List<Car> list2 = carList_02.stream().filter(c02 -> c02.getExternalId().equals(c.getId())).collect(Collectors.toList());
+            //long count = carList_02.stream().filter(c_02 -> !c_02.getId().equals(c.getExternalId())).filter(c02 -> !c02.getExternalId().equals(c.getId())).count();
+            if (list1.size() == 0 && list2.size() == 0) carList_03.add(c);
+        }
+
+        for (Car c: carList_03) {
+            System.out.println(JSON.toJSONString(c));
+        }
+    }
+   static Set<Integer> peerEurekaNodeUrls = new HashSet<Integer>(Arrays.asList(1 ,2 , 3, 4));
+    @Test
+    public void test33() {
+        List<Integer> collection = new ArrayList();
+        collection.add(1);
+        collection.add(3);
+        updatePeerEurekaNodes(collection);
+    }
+
+    protected void updatePeerEurekaNodes(List<Integer> newPeerUrls) {
+        Set<Integer> toShutdown = new HashSet<>(peerEurekaNodeUrls);
+        toShutdown.removeAll(newPeerUrls);
+        newPeerUrls.add(5);
+        Set<Integer> toAdd = new HashSet<>(newPeerUrls);
+        toAdd.removeAll(peerEurekaNodeUrls);
+        System.out.println("toShutdown >>> " + JSON.toJSONString(toShutdown));
+        System.out.println("toAdd >>> " + JSON.toJSONString(toAdd));
     }
 }

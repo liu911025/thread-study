@@ -1,17 +1,14 @@
 package com.example.demotest.util;
 
+import net.coobird.thumbnailator.Thumbnails;
+
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.List;
 
 public class ImageUtil {
@@ -385,14 +382,18 @@ public class ImageUtil {
 
     public static void main(String[] args) throws Exception {
 
-        String path = "E:\\upload\\image\\wx.png";
+        String src = "E:\\upload\\pic/7466a0ff9abb4297afe7f1df6ff9b770.png";
+        String target = "E:\\upload\\pic\\de-test.jpg";
+        yaSuoImage(src, target);
+
+        /*String path = "E:\\upload\\image\\wx.png";
 
         BufferedImage image1 = ImageIO.read(new FileInputStream(new File(path)));
         byte[] imgbyte = transferAlpha(image1, null, 255);
         OutputStream os = new FileOutputStream("E:\\321.jpg");
         os.write(imgbyte, 0, imgbyte.length);
         os.flush();
-        os.close();
+        os.close();*/
 
 		/*BufferedImage scaleImage = ImageIO.read(new FileInputStream(new File("E:\\321.jpg")));
 		String destPath = path.substring(0 , path.lastIndexOf(".")) + "_scale" + path.substring(path.lastIndexOf("."));
@@ -425,6 +426,7 @@ public class ImageUtil {
 		os.write(imgbyte, 0, imgbyte.length);
 		os.flush();
 		os.close();*/
+
     }
 
 
@@ -446,4 +448,15 @@ public class ImageUtil {
             e.printStackTrace();
         }
     }
+
+    public static void yaSuoImage(String src, String target) {
+        //        Thumbnails.of(fromPic).scale(1f).outputQuality(0.25f).toFile(toPic);
+        try {
+            Thumbnails.of(src).scale(1f).outputQuality(0.2f).toFile(target);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

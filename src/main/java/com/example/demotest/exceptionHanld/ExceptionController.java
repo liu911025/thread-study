@@ -19,7 +19,7 @@ public class ExceptionController {
 
         e.printStackTrace();
 
-        log.error(e.getMessage(), e);
+        //log.error(e.getMessage(), e);
 
         Map<String, String> result = new HashMap<>();
         result.put("message", e.getMessage());

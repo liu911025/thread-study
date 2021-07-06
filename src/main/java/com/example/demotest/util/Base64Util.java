@@ -144,4 +144,10 @@ public class Base64Util {
 
         return null;
     }
+
+    public static void main(String[] args) {
+        String pdfPath = "D:\\123.pdf";
+        String s = Base64Util.fileToBase64(pdfPath);
+        System.out.println(s);
+    }
 }
